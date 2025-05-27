@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,81 +8,47 @@ import { Label } from '@/components/ui/label';
 import { Activity, Eye, EyeOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+const ResetPassword = () => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    general: ''
-  });
+  const [isTokenValid, setIsTokenValid] = useState(true);
+  const [errors, setErrors] = useState({ password: '', confirmPassword: '', general: '' });
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    // Clear error when user starts typing
-    if (errors[e.target.name as keyof typeof errors]) {
-      setErrors({
-        ...errors,
-        [e.target.name]: ''
-      });
+  const token = searchParams.get('token');
+  const email = searchParams.get('email');
+
+  useEffect(() => {
+    // In real app, validate token with backend
+    if (!token || !email) {
+      setIsTokenValid(false);
     }
-  };
+  }, [token, email]);
 
   const validateForm = () => {
-    const newErrors = {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      general: ''
-    };
+    const newErrors = { password: '', confirmPassword: '', general: '' };
     let isValid = true;
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Full name is required';
-      isValid = false;
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
-      isValid = false;
-    }
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-      isValid = false;
-    }
-
-    if (!formData.password) {
+    if (!password) {
       newErrors.password = 'Password is required';
       isValid = false;
-    } else if (formData.password.length < 6) {
+    } else if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
       isValid = false;
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
       newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
       isValid = false;
     }
 
-    if (!formData.confirmPassword) {
+    if (!confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
       isValid = false;
-    } else if (formData.password !== formData.confirmPassword) {
+    } else if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
       isValid = false;
     }
@@ -91,7 +57,7 @@ const Signup = () => {
     return isValid;
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -99,51 +65,72 @@ const Signup = () => {
     }
 
     setIsLoading(true);
-    setErrors({ name: '', email: '', password: '', confirmPassword: '', general: '' });
+    setErrors({ password: '', confirmPassword: '', general: '' });
 
-    // Simulate API call - In real app, this would be your backend API
+    // Simulate API call - In real app, this would update password in database
     setTimeout(() => {
-      // Check if user already exists (in real app, this would be a database check)
+      // Update user password (in real app, this would be hashed)
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const existingUser = registeredUsers.find((u: any) => u.email === formData.email);
+      const userIndex = registeredUsers.findIndex((u: any) => u.email === email);
 
-      if (existingUser) {
-        setErrors({ 
-          name: '', 
-          email: 'An account with this email already exists. Please use a different email or try logging in.', 
-          password: '', 
-          confirmPassword: '', 
-          general: '' 
-        });
+      if (userIndex === -1) {
+        setErrors({ password: '', confirmPassword: '', general: 'User not found' });
         setIsLoading(false);
         return;
       }
 
-      // Store user (in real app, password would be hashed)
-      const newUser = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password, // In real app: await bcrypt.hash(password, 10)
-        createdAt: new Date().toISOString()
-      };
-
-      registeredUsers.push(newUser);
+      // Update password (in real app: await bcrypt.hash(password, 10))
+      registeredUsers[userIndex].password = password;
+      registeredUsers[userIndex].updatedAt = new Date().toISOString();
       localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
 
-      // Auto-login the user
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userEmail', formData.email);
-      localStorage.setItem('userName', formData.name);
-      
       toast({
-        title: "Account created successfully",
-        description: "Welcome to CallSense Insight!",
+        title: "Password updated successfully",
+        description: "You can now log in with your new password",
       });
       
-      navigate('/');
+      navigate('/login');
       setIsLoading(false);
     }, 1500);
   };
+
+  if (!isTokenValid) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-gray-800/80 backdrop-blur-xl border-gray-700/50 text-white relative z-10">
+          <CardHeader className="space-y-4 text-center">
+            <div className="flex items-center justify-center space-x-2">
+              <Activity className="h-8 w-8 text-blue-500" />
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                CallSense
+              </span>
+            </div>
+            <div className="flex justify-center">
+              <AlertCircle className="h-16 w-16 text-red-500" />
+            </div>
+            <CardTitle className="text-2xl font-bold">Invalid Reset Link</CardTitle>
+            <CardDescription className="text-gray-300">
+              This password reset link is invalid or has expired
+            </CardDescription>
+          </CardHeader>
+          
+          <CardFooter className="flex flex-col space-y-4">
+            <Link to="/forgot-password" className="w-full">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                Request New Reset Link
+              </Button>
+            </Link>
+            
+            <Link to="/login" className="w-full">
+              <Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-700/50">
+                Back to Login
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -161,58 +148,30 @@ const Signup = () => {
               CallSense
             </span>
           </div>
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+          <CardTitle className="text-2xl font-bold">Set New Password</CardTitle>
           <CardDescription className="text-gray-300">
-            Join CallSense Insight to get started
+            Enter your new password for {email}
           </CardDescription>
         </CardHeader>
         
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-gray-200">Full Name</Label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 ${
-                  errors.name ? 'border-red-500 focus:border-red-500' : ''
-                }`}
-                required
-              />
-              {errors.name && <span className="text-sm text-red-400">{errors.name}</span>}
-            </div>
+            {errors.general && (
+              <div className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <AlertCircle className="h-4 w-4 text-red-400" />
+                <span className="text-sm text-red-400">{errors.general}</span>
+              </div>
+            )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-200">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 ${
-                  errors.email ? 'border-red-500 focus:border-red-500' : ''
-                }`}
-                required
-              />
-              {errors.email && <span className="text-sm text-red-400">{errors.email}</span>}
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-200">Password</Label>
+              <Label htmlFor="password" className="text-gray-200">New Password</Label>
               <div className="relative">
                 <Input
                   id="password"
-                  name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a strong password"
-                  value={formData.password}
-                  onChange={handleInputChange}
+                  placeholder="Enter new password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10 ${
                     errors.password ? 'border-red-500 focus:border-red-500' : ''
                   }`}
@@ -233,15 +192,14 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-gray-200">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-gray-200">Confirm New Password</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
-                  name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10 ${
                     errors.confirmPassword ? 'border-red-500 focus:border-red-500' : ''
                   }`}
@@ -268,19 +226,18 @@ const Signup = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account...
+                  Updating password...
                 </>
               ) : (
-                'Create Account'
+                'Update Password'
               )}
             </Button>
             
-            <div className="text-center text-sm text-gray-400">
-              Already have an account?{' '}
-              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">
-                Sign in
-              </Link>
-            </div>
+            <Link to="/login" className="w-full">
+              <Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-700/50">
+                Back to Login
+              </Button>
+            </Link>
           </CardFooter>
         </form>
       </Card>
@@ -288,4 +245,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default ResetPassword;

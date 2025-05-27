@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Activity, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Activity, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
@@ -13,36 +13,76 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({ email: '', password: '', general: '' });
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validateForm = () => {
+    const newErrors = { email: '', password: '', general: '' };
+    let isValid = true;
+
+    if (!email) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+      isValid = false;
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    if (!validateForm()) {
+      return;
+    }
 
-    // Simulate API call
+    setIsLoading(true);
+    setErrors({ email: '', password: '', general: '' });
+
+    // Simulate API call - In real app, this would be your backend API
     setTimeout(() => {
-      // Simple validation for demo
-      if (email && password) {
-        // Store user session
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userEmail', email);
-        
-        toast({
-          title: "Login successful",
-          description: "Welcome back to CallSense Insight!",
-        });
-        
-        navigate('/');
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Please check your email and password.",
-          variant: "destructive",
-        });
+      // Check if user is "registered" (in real app, this would be a database check)
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const user = registeredUsers.find((u: any) => u.email === email);
+
+      if (!user) {
+        setErrors({ email: '', password: '', general: 'No account found with this email address. Please sign up first.' });
+        setIsLoading(false);
+        return;
       }
+
+      // In real app, you'd verify the hashed password
+      if (user.password !== password) {
+        setErrors({ email: '', password: '', general: 'Invalid email or password. Please try again.' });
+        setIsLoading(false);
+        return;
+      }
+
+      // Store user session (in real app, this would be a JWT token)
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', user.name || email.split('@')[0]);
+      
+      toast({
+        title: "Login successful",
+        description: "Welcome back to CallSense Insight!",
+      });
+      
+      navigate('/');
       setIsLoading(false);
-    }, 1000);
+    }, 1500);
   };
 
   return (
@@ -69,6 +109,13 @@ const Login = () => {
         
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
+            {errors.general && (
+              <div className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <AlertCircle className="h-4 w-4 text-red-400" />
+                <span className="text-sm text-red-400">{errors.general}</span>
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-200">Email</Label>
               <Input
@@ -77,9 +124,12 @@ const Login = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500"
+                className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 ${
+                  errors.email ? 'border-red-500 focus:border-red-500' : ''
+                }`}
                 required
               />
+              {errors.email && <span className="text-sm text-red-400">{errors.email}</span>}
             </div>
             
             <div className="space-y-2">
@@ -91,7 +141,9 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10"
+                  className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10 ${
+                    errors.password ? 'border-red-500 focus:border-red-500' : ''
+                  }`}
                   required
                 />
                 <button
@@ -102,6 +154,16 @@ const Login = () => {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {errors.password && <span className="text-sm text-red-400">{errors.password}</span>}
+            </div>
+
+            <div className="text-right">
+              <Link 
+                to="/forgot-password" 
+                className="text-sm text-blue-400 hover:text-blue-300 hover:underline"
+              >
+                Forgot Password?
+              </Link>
             </div>
           </CardContent>
           
