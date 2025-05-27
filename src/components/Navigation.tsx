@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Activity, BarChart3, History, BookOpen, Zap, User } from 'lucide-react';
+import ProfileDropdown from './ProfileDropdown';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   const navItems = [
     { path: '/', label: 'Home', icon: Activity },
@@ -29,7 +31,7 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => {
+            {isAuthenticated && navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               return (
@@ -47,10 +49,36 @@ const Navigation = () => {
                 </Link>
               );
             })}
+            
+            {/* Profile Dropdown */}
+            {isAuthenticated && (
+              <div className="ml-4">
+                <ProfileDropdown />
+              </div>
+            )}
+            
+            {/* Auth Links for non-authenticated users */}
+            {!isAuthenticated && (
+              <div className="flex items-center space-x-4">
+                <Link
+                  to="/login"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-lg transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
+            {isAuthenticated && <ProfileDropdown />}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-300 hover:text-white"
@@ -65,25 +93,44 @@ const Navigation = () => {
       {isOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
+            {isAuthenticated ? (
+              navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                      isActive
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })
+            ) : (
+              <>
                 <Link
-                  key={item.path}
-                  to={item.path}
+                  to="/login"
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
-                  }`}
+                  className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
+                  Login
                 </Link>
-              );
-            })}
+                <Link
+                  to="/signup"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
