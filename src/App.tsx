@@ -13,6 +13,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import CallHistory from "./pages/CallHistory";
+import Documentation from "./pages/Documentation";
+import Demo from "./pages/Demo";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +54,30 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <CallHistory />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/docs" 
+              element={
+                <ProtectedRoute>
+                  <Documentation />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/demo" 
+              element={
+                <ProtectedRoute>
+                  <Demo />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/about" 
+              element={
+                <ProtectedRoute>
+                  <About />
                 </ProtectedRoute>
               } 
             />
