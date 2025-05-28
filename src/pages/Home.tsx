@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, Activity, BarChart3, Zap, Shield, Play, ChevronRight, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowDown, Activity, BarChart3, Zap, Shield, Play, ChevronRight, ArrowRight, Sparkles, Download, FileText, Calendar } from 'lucide-react';
 
 const Home = () => {
   const features = [
@@ -165,6 +165,107 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Project Whitepaper Section */}
+      <div className="relative px-6 py-20 sm:px-12 lg:px-16 bg-gradient-to-r from-gray-900/60 to-gray-800/60 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+              Project Whitepaper
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Dive deep into the technical architecture, methodologies, and use cases of our real-time sentiment analysis system. 
+              This comprehensive whitepaper provides detailed insights into the AI models, data processing pipelines, and performance metrics.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Whitepaper Preview Card */}
+            <div className="group bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 hover:border-cyan-500/50 rounded-3xl p-8 hover:bg-gray-800/80 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20">
+              <div className="mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 bg-cyan-500/20 rounded-2xl">
+                    <FileText className="h-8 w-8 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Technical Whitepaper</h3>
+                    <p className="text-gray-400">Real-Time Sentiment Analysis of Incoming Calls</p>
+                  </div>
+                </div>
+                
+                {/* File Metadata */}
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <FileText className="h-4 w-4 text-cyan-400" />
+                    <span>PDF Format</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Calendar className="h-4 w-4 text-purple-400" />
+                    <span>Version 2.1</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <ArrowDown className="h-4 w-4 text-pink-400" />
+                    <span>42 Pages</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Sparkles className="h-4 w-4 text-cyan-400" />
+                    <span>Dec 2024</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Preview Mockup */}
+              <div className="bg-gray-700/50 rounded-xl p-4 mb-6 border border-gray-600/30">
+                <div className="bg-white rounded-lg p-6 text-gray-800 shadow-lg">
+                  <div className="text-xs font-bold mb-2 text-center text-gray-600">PREVIEW</div>
+                  <h4 className="text-lg font-bold mb-3 text-center">Real-Time Sentiment Analysis</h4>
+                  <div className="space-y-2">
+                    <div className="h-2 bg-gray-200 rounded w-full"></div>
+                    <div className="h-2 bg-gray-200 rounded w-4/5"></div>
+                    <div className="h-2 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-2 bg-gray-200 rounded w-5/6"></div>
+                  </div>
+                  <div className="mt-4 text-center text-xs text-gray-500">
+                    Abstract: This paper presents a comprehensive approach...
+                  </div>
+                </div>
+              </div>
+
+              <button className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 border border-cyan-500/30">
+                <span className="flex items-center justify-center gap-3">
+                  <Download className="h-5 w-5" />
+                  Download Whitepaper
+                  <ArrowRight className="h-5 w-5" />
+                </span>
+              </button>
+            </div>
+
+            {/* Content Overview */}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-4">What's Inside</h3>
+                <div className="space-y-4">
+                  {[
+                    { title: "System Architecture", desc: "Detailed overview of the AI pipeline and infrastructure" },
+                    { title: "RAVDESS Integration", desc: "How we leverage the emotional speech database for training" },
+                    { title: "Real-time Processing", desc: "WebSocket implementation and low-latency analysis" },
+                    { title: "Performance Metrics", desc: "Accuracy benchmarks and system performance data" },
+                    { title: "Use Cases & Applications", desc: "Industry applications and implementation strategies" }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full mt-3 flex-shrink-0"></div>
+                      <div>
+                        <h4 className="font-semibold text-white">{item.title}</h4>
+                        <p className="text-gray-400 text-sm">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Auth Section */}
       <div id="auth-section" className="relative px-6 py-20 sm:px-12 lg:px-16 bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto text-center">
@@ -175,29 +276,17 @@ const Home = () => {
             <p className="text-xl text-gray-300 leading-relaxed">
               Join thousands of businesses already using CallSense Insight to improve their customer experience.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link
-                to="/signup"
-                className="group bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white px-12 py-6 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50 border border-purple-400/30"
+                to="/dashboard"
+                className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-12 py-6 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50 border border-blue-400/30"
               >
                 <span className="flex items-center gap-2">
-                  Create Account
-                  <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
-              <Link
-                to="/login"
-                className="group bg-gray-800/60 text-gray-200 hover:bg-gray-700/60 hover:text-white border-2 border-gray-600 hover:border-cyan-400 px-12 py-6 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 backdrop-blur-sm"
-              >
-                <span className="flex items-center gap-2">
-                  Sign In
+                  Go to Dashboard
                   <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             </div>
-            <p className="text-sm text-gray-400">
-              Already have an account? <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline">Sign in here</Link>
-            </p>
           </div>
         </div>
       </div>
