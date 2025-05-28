@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Activity, Phone, TrendingUp, Users, AlertCircle, Clock, Mic, MicOff, Zap, Heart, Star, User, Settings, LogOut } from 'lucide-react';
+import { Activity, Phone, TrendingUp, Users, AlertCircle, Clock, Mic, MicOff, Zap, Heart, Star, User, Settings, LogOut, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -64,8 +64,8 @@ const Dashboard = () => {
   ]);
 
   const emotionData = [
-    { name: 'Happy', value: 35, color: '#10B981' },
-    { name: 'Neutral', value: 40, color: '#3B82F6' },
+    { name: 'Happy', value: 35, color: '#06B6D4' },
+    { name: 'Neutral', value: 40, color: '#8B5CF6' },
     { name: 'Angry', value: 15, color: '#EF4444' },
     { name: 'Sad', value: 10, color: '#F59E0B' },
   ];
@@ -110,27 +110,27 @@ const Dashboard = () => {
   }, []);
 
   const stats = [
-    { label: 'Active Calls', value: '12', icon: Phone, color: 'from-emerald-400 to-cyan-400', bgColor: 'bg-emerald-50', iconColor: 'text-emerald-600', textColor: 'text-emerald-700', change: '+2' },
-    { label: 'Today\'s Calls', value: '247', icon: Activity, color: 'from-blue-400 to-indigo-400', bgColor: 'bg-blue-50', iconColor: 'text-blue-600', textColor: 'text-blue-700', change: '+23' },
-    { label: 'Avg Sentiment', value: '0.6', icon: TrendingUp, color: 'from-purple-400 to-pink-400', bgColor: 'bg-purple-50', iconColor: 'text-purple-600', textColor: 'text-purple-700', change: '+0.1' },
-    { label: 'Agents Online', value: '8', icon: Users, color: 'from-orange-400 to-yellow-400', bgColor: 'bg-orange-50', iconColor: 'text-orange-600', textColor: 'text-orange-700', change: '0' }
+    { label: 'Active Calls', value: '12', icon: Phone, color: 'from-cyan-400 to-blue-400', bgColor: 'bg-cyan-500/10', iconColor: 'text-cyan-400', textColor: 'text-cyan-300', change: '+2' },
+    { label: 'Today\'s Calls', value: '247', icon: Activity, color: 'from-purple-400 to-pink-400', bgColor: 'bg-purple-500/10', iconColor: 'text-purple-400', textColor: 'text-purple-300', change: '+23' },
+    { label: 'Avg Sentiment', value: '0.6', icon: TrendingUp, color: 'from-emerald-400 to-cyan-400', bgColor: 'bg-emerald-500/10', iconColor: 'text-emerald-400', textColor: 'text-emerald-300', change: '+0.1' },
+    { label: 'Agents Online', value: '8', icon: Users, color: 'from-orange-400 to-yellow-400', bgColor: 'bg-orange-500/10', iconColor: 'text-orange-400', textColor: 'text-orange-300', change: '0' }
   ];
 
   const getSentimentColor = (score) => {
-    if (score > 0.3) return 'text-emerald-600';
-    if (score < -0.3) return 'text-rose-600';
-    return 'text-amber-600';
+    if (score > 0.3) return 'text-emerald-400';
+    if (score < -0.3) return 'text-rose-400';
+    return 'text-amber-400';
   };
 
   const getEmotionColor = (emotion) => {
     const colors = {
-      'Happy': 'text-emerald-600',
-      'Angry': 'text-rose-600',
-      'Sad': 'text-blue-600',
-      'Neutral': 'text-gray-600',
-      'Surprised': 'text-purple-600'
+      'Happy': 'text-emerald-400',
+      'Angry': 'text-rose-400',
+      'Sad': 'text-blue-400',
+      'Neutral': 'text-gray-400',
+      'Surprised': 'text-purple-400'
     };
-    return colors[emotion] || 'text-gray-600';
+    return colors[emotion] || 'text-gray-400';
   };
 
   const chartConfig = {
@@ -141,42 +141,45 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800 font-inter">
-      {/* Floating Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white font-inter">
+      {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-indigo-200/20 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-6 p-6">
         {/* Header with Navigation */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-lg border border-gray-200/50">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 bg-gray-800/40 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-gray-700/50 hover:border-cyan-500/30 transition-all duration-300">
           <div className="mb-4 sm:mb-0">
             <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
+              <div className="p-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl shadow-lg">
                 <Activity className="h-6 w-6 text-white" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Live Dashboard
-              </h1>
+              <div className="flex items-center space-x-2">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Live Dashboard
+                </h1>
+                <Sparkles className="h-5 w-5 text-cyan-400 animate-pulse" />
+              </div>
             </div>
-            <p className="text-lg text-gray-600">Welcome back, <span className="font-semibold text-blue-600">{userEmail}</span>!</p>
-            <p className="text-sm text-gray-500">Real-time sentiment and emotion analysis</p>
+            <p className="text-lg text-gray-300">Welcome back, <span className="font-bold text-cyan-400">{userEmail}</span>!</p>
+            <p className="text-sm text-gray-400">Real-time sentiment and emotion analysis</p>
           </div>
           
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm bg-emerald-100 px-4 py-2 rounded-full border border-emerald-200">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-emerald-700 font-medium">System Online</span>
+            <div className="flex items-center space-x-2 text-sm bg-emerald-500/20 border border-emerald-500/30 px-4 py-2 rounded-full backdrop-blur-sm">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-emerald-300 font-medium">System Online</span>
             </div>
             
             {/* Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="relative rounded-full bg-white p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-md">
+                <button className="relative rounded-full bg-gray-800/60 border border-gray-600/50 hover:border-cyan-500/50 p-2 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 shadow-lg hover:shadow-cyan-500/20">
                   <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium">
+                    <AvatarFallback className="bg-gradient-to-r from-cyan-600 to-purple-600 text-white text-sm font-bold">
                       {getInitials(userName)}
                     </AvatarFallback>
                   </Avatar>
@@ -184,33 +187,33 @@ const Dashboard = () => {
               </DropdownMenuTrigger>
               
               <DropdownMenuContent 
-                className="w-56 bg-white/95 backdrop-blur-xl border-gray-200 shadow-xl rounded-2xl" 
+                className="w-56 bg-gray-800/95 backdrop-blur-xl border-gray-600/50 shadow-2xl rounded-2xl text-white" 
                 align="end"
                 sideOffset={5}
               >
                 <DropdownMenuLabel className="font-normal p-4">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium text-gray-800">{userName}</p>
-                    <p className="text-xs text-gray-500">{userEmail}</p>
+                    <p className="text-sm font-medium text-gray-200">{userName}</p>
+                    <p className="text-xs text-gray-400">{userEmail}</p>
                   </div>
                 </DropdownMenuLabel>
                 
-                <DropdownMenuSeparator className="bg-gray-200" />
+                <DropdownMenuSeparator className="bg-gray-600/50" />
                 
-                <DropdownMenuItem className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 cursor-pointer mx-2 rounded-xl">
+                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700/50 cursor-pointer mx-2 rounded-xl">
                   <User className="mr-2 h-4 w-4" />
                   <span>View Profile</span>
                 </DropdownMenuItem>
                 
-                <DropdownMenuItem className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 cursor-pointer mx-2 rounded-xl">
+                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700/50 cursor-pointer mx-2 rounded-xl">
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
                 
-                <DropdownMenuSeparator className="bg-gray-200" />
+                <DropdownMenuSeparator className="bg-gray-600/50" />
                 
                 <DropdownMenuItem 
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer mx-2 rounded-xl"
+                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer mx-2 rounded-xl"
                   onClick={handleLogout}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
@@ -226,21 +229,21 @@ const Dashboard = () => {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Card key={index} className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:bg-white/90 hover:border-gray-300/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl group cursor-pointer rounded-3xl">
+              <Card key={index} className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:bg-gray-800/60 hover:border-cyan-500/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 group cursor-pointer rounded-3xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-2">
-                      <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
+                      <p className="text-gray-400 text-sm font-medium">{stat.label}</p>
                       <div className="flex items-center space-x-2">
                         <p className={`text-2xl font-bold ${stat.textColor}`}>
                           {stat.value}
                         </p>
-                        <span className={`text-xs px-2 py-1 rounded-full ${stat.change.startsWith('+') ? 'text-emerald-600 bg-emerald-100' : stat.change === '0' ? 'text-gray-500 bg-gray-100' : 'text-rose-600 bg-rose-100'}`}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${stat.change.startsWith('+') ? 'text-emerald-300 bg-emerald-500/20 border border-emerald-500/30' : stat.change === '0' ? 'text-gray-400 bg-gray-500/20 border border-gray-500/30' : 'text-rose-300 bg-rose-500/20 border border-rose-500/30'}`}>
                           {stat.change !== '0' && stat.change}
                         </span>
                       </div>
                     </div>
-                    <div className={`p-3 rounded-2xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`p-3 rounded-2xl ${stat.bgColor} border border-gray-600/30 group-hover:scale-110 transition-transform duration-300 group-hover:border-cyan-500/50`}>
                       <Icon className={`h-6 w-6 ${stat.iconColor}`} />
                     </div>
                   </div>
@@ -254,29 +257,29 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Live Transcript */}
           <div className="xl:col-span-2 space-y-6">
-            <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 rounded-3xl shadow-lg">
+            <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
               <CardHeader>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
-                  <CardTitle className="text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Live Transcription</CardTitle>
-                  <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-300">
+                  <CardTitle className="text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Live Transcription</CardTitle>
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-700/50 border border-gray-600/50 hover:bg-gray-600/50 transition-all duration-300">
                     {isRecording ? (
                       <>
-                        <Mic className="h-4 w-4 text-rose-500" />
-                        <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-                        <span className="text-sm text-rose-600 font-medium">Recording</span>
+                        <Mic className="h-4 w-4 text-rose-400" />
+                        <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></div>
+                        <span className="text-sm text-rose-300 font-medium">Recording</span>
                       </>
                     ) : (
                       <>
-                        <MicOff className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm text-gray-500">Standby</span>
+                        <MicOff className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm text-gray-400">Standby</span>
                       </>
                     )}
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="bg-gray-50 rounded-2xl p-6 min-h-[200px] border border-gray-200 hover:border-gray-300 transition-all duration-300">
-                  <p className="text-gray-700 leading-relaxed">
+                <div className="bg-gray-900/50 rounded-2xl p-6 min-h-[200px] border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
+                  <p className="text-gray-300 leading-relaxed">
                     {transcript || "Waiting for incoming call..."}
                   </p>
                 </div>
@@ -285,24 +288,24 @@ const Dashboard = () => {
 
             {/* Charts Section */}
             <Tabs defaultValue="sentiment" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-white/50 p-1 rounded-2xl border border-gray-200">
-                <TabsTrigger value="sentiment" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300 rounded-xl">
+              <TabsList className="grid w-full grid-cols-3 bg-gray-800/60 border border-gray-700/50 p-1 rounded-2xl backdrop-blur-xl">
+                <TabsTrigger value="sentiment" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300 rounded-xl text-gray-300">
                   <span className="hidden sm:inline">Sentiment Trend</span>
                   <span className="sm:hidden">Sentiment</span>
                 </TabsTrigger>
-                <TabsTrigger value="emotions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white transition-all duration-300 rounded-xl">
+                <TabsTrigger value="emotions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white transition-all duration-300 rounded-xl text-gray-300">
                   Emotions
                 </TabsTrigger>
-                <TabsTrigger value="volume" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white transition-all duration-300 rounded-xl">
+                <TabsTrigger value="volume" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white transition-all duration-300 rounded-xl text-gray-300">
                   <span className="hidden sm:inline">Call Volume</span>
                   <span className="sm:hidden">Volume</span>
                 </TabsTrigger>
               </TabsList>
               
               <TabsContent value="sentiment" className="space-y-4 mt-4">
-                <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 rounded-3xl shadow-lg">
+                <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-cyan-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
                   <CardHeader>
-                    <CardTitle className="text-lg text-gray-800">Sentiment Over Time</CardTitle>
+                    <CardTitle className="text-lg text-gray-200">Sentiment Over Time</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px]">
@@ -316,13 +319,13 @@ const Dashboard = () => {
                             dataKey="sentiment" 
                             stroke="url(#sentimentGradient)" 
                             strokeWidth={3}
-                            dot={{ fill: '#10B981', strokeWidth: 2, r: 5 }}
-                            activeDot={{ r: 7, stroke: '#10B981', strokeWidth: 3, fill: '#ffffff' }}
+                            dot={{ fill: '#06B6D4', strokeWidth: 2, r: 5 }}
+                            activeDot={{ r: 7, stroke: '#06B6D4', strokeWidth: 3, fill: '#ffffff' }}
                           />
                           <defs>
                             <linearGradient id="sentimentGradient" x1="0" y1="0" x2="1" y2="0">
-                              <stop offset="0%" stopColor="#10B981" />
-                              <stop offset="100%" stopColor="#3B82F6" />
+                              <stop offset="0%" stopColor="#06B6D4" />
+                              <stop offset="100%" stopColor="#8B5CF6" />
                             </linearGradient>
                           </defs>
                         </LineChart>
@@ -333,9 +336,9 @@ const Dashboard = () => {
               </TabsContent>
 
               <TabsContent value="emotions" className="space-y-4 mt-4">
-                <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 rounded-3xl shadow-lg">
+                <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
                   <CardHeader>
-                    <CardTitle className="text-lg text-gray-800">Emotion Distribution</CardTitle>
+                    <CardTitle className="text-lg text-gray-200">Emotion Distribution</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px]">
@@ -363,9 +366,9 @@ const Dashboard = () => {
               </TabsContent>
 
               <TabsContent value="volume" className="space-y-4 mt-4">
-                <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 rounded-3xl shadow-lg">
+                <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-emerald-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
                   <CardHeader>
-                    <CardTitle className="text-lg text-gray-800">Hourly Call Volume</CardTitle>
+                    <CardTitle className="text-lg text-gray-200">Hourly Call Volume</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px]">
@@ -377,8 +380,8 @@ const Dashboard = () => {
                           <Bar dataKey="calls" fill="url(#volumeGradient)" radius={[8, 8, 0, 0]} />
                           <defs>
                             <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#10B981" />
-                              <stop offset="100%" stopColor="#3B82F6" />
+                              <stop offset="0%" stopColor="#10F2C4" />
+                              <stop offset="100%" stopColor="#06B6D4" />
                             </linearGradient>
                           </defs>
                         </BarChart>
@@ -393,11 +396,11 @@ const Dashboard = () => {
           {/* Analysis Panel */}
           <div className="space-y-6">
             {/* Current Sentiment */}
-            <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 group rounded-3xl shadow-lg">
+            <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:bg-gray-800/60 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 group rounded-3xl shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center space-x-2">
-                  <Heart className="h-5 w-5 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-gray-800">Current Sentiment</span>
+                  <Heart className="h-5 w-5 text-rose-400 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-gray-200">Current Sentiment</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -405,14 +408,14 @@ const Dashboard = () => {
                   <div className={`text-3xl font-bold ${getSentimentColor(sentiment.score)} group-hover:scale-105 transition-transform duration-300`}>
                     {sentiment.label}
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-400">
                     Score: {sentiment.score.toFixed(2)}
                   </div>
                   <Progress 
                     value={Math.abs(sentiment.score) * 50 + 50} 
-                    className="w-full h-3 bg-gray-200 rounded-full"
+                    className="w-full h-3 bg-gray-700 rounded-full"
                   />
-                  <div className="flex justify-between text-xs text-gray-500">
+                  <div className="flex justify-between text-xs text-gray-400">
                     <span>Negative</span>
                     <span>Neutral</span>
                     <span>Positive</span>
@@ -422,11 +425,11 @@ const Dashboard = () => {
             </Card>
 
             {/* Current Emotion */}
-            <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 group rounded-3xl shadow-lg">
+            <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:bg-gray-800/60 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 group rounded-3xl shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-yellow-500 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-gray-800">Detected Emotion</span>
+                  <Star className="h-5 w-5 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-gray-200">Detected Emotion</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -435,7 +438,7 @@ const Dashboard = () => {
                     {emotion}
                   </div>
                   <div className="flex justify-center">
-                    <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center border-2 border-gray-200 hover:border-gray-300 hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <div className="w-16 h-16 rounded-full bg-gray-700/50 border border-gray-600/50 flex items-center justify-center hover:border-cyan-500/50 hover:scale-110 transition-all duration-300 cursor-pointer hover:shadow-lg hover:shadow-cyan-500/20">
                       <span className="text-2xl">
                         {emotion === 'Happy' && '😊'}
                         {emotion === 'Angry' && '😠'}
@@ -450,35 +453,35 @@ const Dashboard = () => {
             </Card>
 
             {/* Alerts */}
-            <Card className="bg-white/80 backdrop-blur-xl border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 rounded-3xl shadow-lg">
+            <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center space-x-2">
-                  <Zap className="h-5 w-5 text-amber-500" />
-                  <span className="text-gray-800">Active Alerts</span>
+                  <Zap className="h-5 w-5 text-amber-400" />
+                  <span className="text-gray-200">Active Alerts</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {sentiment.score < -0.5 && (
-                    <div className="flex items-center space-x-2 text-rose-600 p-3 bg-rose-50 rounded-2xl border border-rose-200 hover:bg-rose-100 transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center space-x-2 text-rose-300 p-3 bg-rose-500/10 border border-rose-500/30 rounded-2xl hover:bg-rose-500/20 transition-all duration-300 cursor-pointer">
                       <AlertCircle className="h-4 w-4 flex-shrink-0" />
                       <span className="text-sm font-medium">High negative sentiment detected</span>
                     </div>
                   )}
                   {emotion === 'Angry' && (
-                    <div className="flex items-center space-x-2 text-orange-600 p-3 bg-orange-50 rounded-2xl border border-orange-200 hover:bg-orange-100 transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center space-x-2 text-orange-300 p-3 bg-orange-500/10 border border-orange-500/30 rounded-2xl hover:bg-orange-500/20 transition-all duration-300 cursor-pointer">
                       <AlertCircle className="h-4 w-4 flex-shrink-0" />
                       <span className="text-sm font-medium">Customer appears angry</span>
                     </div>
                   )}
                   {sentiment.score > 0.5 && (
-                    <div className="flex items-center space-x-2 text-emerald-600 p-3 bg-emerald-50 rounded-2xl border border-emerald-200 hover:bg-emerald-100 transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center space-x-2 text-emerald-300 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl hover:bg-emerald-500/20 transition-all duration-300 cursor-pointer">
                       <Activity className="h-4 w-4 flex-shrink-0" />
                       <span className="text-sm font-medium">Positive interaction detected</span>
                     </div>
                   )}
                   {sentiment.score >= -0.5 && sentiment.score <= 0.5 && emotion === 'Neutral' && (
-                    <div className="flex items-center space-x-2 text-gray-600 p-3 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-gray-100 transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center space-x-2 text-gray-400 p-3 bg-gray-500/10 border border-gray-500/30 rounded-2xl hover:bg-gray-500/20 transition-all duration-300 cursor-pointer">
                       <Clock className="h-4 w-4 flex-shrink-0" />
                       <span className="text-sm font-medium">No active alerts</span>
                     </div>

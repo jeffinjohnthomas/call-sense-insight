@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Activity, Eye, EyeOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Activity, Eye, EyeOff, Loader2, AlertCircle, CheckCircle, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
@@ -101,9 +100,8 @@ const Signup = () => {
     setIsLoading(true);
     setErrors({ name: '', email: '', password: '', confirmPassword: '', general: '' });
 
-    // Simulate API call - In real app, this would be your backend API
+    // Simulate API call
     setTimeout(() => {
-      // Check if user already exists (in real app, this would be a database check)
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const existingUser = registeredUsers.find((u: any) => u.email === formData.email);
 
@@ -119,18 +117,16 @@ const Signup = () => {
         return;
       }
 
-      // Store user (in real app, password would be hashed)
       const newUser = {
         name: formData.name,
         email: formData.email,
-        password: formData.password, // In real app: await bcrypt.hash(password, 10)
+        password: formData.password,
         createdAt: new Date().toISOString()
       };
 
       registeredUsers.push(newUser);
       localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
 
-      // Auto-login the user
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('userName', formData.name);
@@ -146,22 +142,24 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      {/* Background decorations */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/5 rounded-full blur-2xl animate-pulse delay-2000"></div>
       </div>
 
-      <Card className="w-full max-w-md bg-gray-800/80 backdrop-blur-xl border-gray-700/50 text-white relative z-10">
+      <Card className="w-full max-w-md bg-gray-800/60 backdrop-blur-xl border-gray-700/50 text-white relative z-10 shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 rounded-3xl">
         <CardHeader className="space-y-4 text-center">
           <div className="flex items-center justify-center space-x-2">
-            <Activity className="h-8 w-8 text-blue-500" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <Activity className="h-8 w-8 text-cyan-400" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               CallSense
             </span>
+            <Sparkles className="h-6 w-6 text-purple-400 animate-pulse" />
           </div>
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">Create Account</CardTitle>
           <CardDescription className="text-gray-300">
             Join CallSense Insight to get started
           </CardDescription>
@@ -178,7 +176,7 @@ const Signup = () => {
                 placeholder="Enter your full name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 ${
+                className={`bg-gray-700/50 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-cyan-500 focus:ring-cyan-500/30 rounded-xl ${
                   errors.name ? 'border-red-500 focus:border-red-500' : ''
                 }`}
                 required
@@ -195,7 +193,7 @@ const Signup = () => {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 ${
+                className={`bg-gray-700/50 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-cyan-500 focus:ring-cyan-500/30 rounded-xl ${
                   errors.email ? 'border-red-500 focus:border-red-500' : ''
                 }`}
                 required
@@ -213,7 +211,7 @@ const Signup = () => {
                   placeholder="Create a strong password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10 ${
+                  className={`bg-gray-700/50 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-cyan-500 focus:ring-cyan-500/30 pr-10 rounded-xl ${
                     errors.password ? 'border-red-500 focus:border-red-500' : ''
                   }`}
                   required
@@ -221,7 +219,7 @@ const Signup = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -242,7 +240,7 @@ const Signup = () => {
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-500 pr-10 ${
+                  className={`bg-gray-700/50 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-cyan-500 focus:ring-cyan-500/30 pr-10 rounded-xl ${
                     errors.confirmPassword ? 'border-red-500 focus:border-red-500' : ''
                   }`}
                   required
@@ -250,7 +248,7 @@ const Signup = () => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -262,7 +260,7 @@ const Signup = () => {
           <CardFooter className="flex flex-col space-y-4">
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white border border-cyan-500/30 hover:border-cyan-400/50 rounded-xl font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -277,7 +275,7 @@ const Signup = () => {
             
             <div className="text-center text-sm text-gray-400">
               Already have an account?{' '}
-              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">
+              <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline transition-colors">
                 Sign in
               </Link>
             </div>
