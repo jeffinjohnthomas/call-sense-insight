@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -26,10 +27,35 @@ const Dashboard = () => {
   const [sentiment, setSentiment] = useState({ score: 0, label: 'Neutral' });
   const [emotion, setEmotion] = useState('Neutral');
   const [isRecording, setIsRecording] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
   
-  // Get user info from localStorage
+  // Get user info from localStorage as fallback
   const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
   const userName = localStorage.getItem('userName') || 'User';
+  
+  // Fetch user profile from Supabase
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name, email')
+            .eq('id', user.id)
+            .single();
+          
+          if (profile) {
+            setUserProfile(profile);
+          }
+        }
+      } catch (error) {
+        console.log('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
   
   const getInitials = (name: string) => {
     return name
@@ -38,6 +64,21 @@ const Dashboard = () => {
       .join('')
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const getDisplayName = () => {
+    if (userProfile?.full_name) {
+      return userProfile.full_name;
+    }
+    return userName !== 'User' ? userName : null;
+  };
+
+  const getWelcomeMessage = () => {
+    const displayName = getDisplayName();
+    if (displayName) {
+      return `Welcome, ${displayName}!`;
+    }
+    return 'Welcome!';
   };
 
   const handleLogout = () => {
@@ -164,7 +205,7 @@ const Dashboard = () => {
                 <Sparkles className="h-5 w-5 text-cyan-400 animate-pulse" />
               </div>
             </div>
-            <p className="text-lg text-gray-300">Welcome back, <span className="font-bold text-cyan-400">{userEmail}</span>!</p>
+            <p className="text-lg text-gray-300">{getWelcomeMessage()}</p>
             <p className="text-sm text-gray-400">Real-time sentiment and emotion analysis</p>
           </div>
           
@@ -180,7 +221,7 @@ const Dashboard = () => {
                 <button className="relative rounded-full bg-gray-800/60 border border-gray-600/50 hover:border-cyan-500/50 p-2 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 shadow-lg hover:shadow-cyan-500/20">
                   <Avatar className="h-10 w-10">
                     <AvatarFallback className="bg-gradient-to-r from-cyan-600 to-purple-600 text-white text-sm font-bold">
-                      {getInitials(userName)}
+                      {getInitials(getDisplayName() || userName)}
                     </AvatarFallback>
                   </Avatar>
                 </button>
@@ -193,8 +234,8 @@ const Dashboard = () => {
               >
                 <DropdownMenuLabel className="font-normal p-4">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium text-gray-200">{userName}</p>
-                    <p className="text-xs text-gray-400">{userEmail}</p>
+                    <p className="text-sm font-medium text-gray-200">{getDisplayName() || userName}</p>
+                    <p className="text-xs text-gray-400">{userProfile?.email || userEmail}</p>
                   </div>
                 </DropdownMenuLabel>
                 
