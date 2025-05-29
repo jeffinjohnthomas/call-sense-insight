@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Activity, Phone, TrendingUp, Users, AlertCircle, Clock, Mic, MicOff, Zap, Heart, Star, User, Settings, LogOut, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,12 +32,14 @@ const Dashboard = () => {
   const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
   const userName = localStorage.getItem('userName') || 'User';
   
-  // Fetch user profile from Supabase
+  // Fetch user profile from Supabase (commented out until profiles table is created)
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
+          // TODO: Uncomment this after running the profiles table migration
+          /*
           const { data: profile } = await supabase
             .from('profiles')
             .select('full_name, email')
@@ -48,6 +49,8 @@ const Dashboard = () => {
           if (profile) {
             setUserProfile(profile);
           }
+          */
+          console.log('User authenticated:', user.email);
         }
       } catch (error) {
         console.log('Error fetching user profile:', error);
