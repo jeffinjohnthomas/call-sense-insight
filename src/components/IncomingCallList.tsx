@@ -26,7 +26,7 @@ const IncomingCallList: React.FC<IncomingCallListProps> = ({ onCallPicked }) => 
   const [activeCalls, setActiveCalls] = useState<Call[]>([]);
   const [ringingAudio] = useState(() => {
     const audio = new Audio();
-    audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeQ==';
+    audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwUBjCIzfPQeQ==';
     audio.loop = true;
     return audio;
   });
@@ -60,15 +60,20 @@ const IncomingCallList: React.FC<IncomingCallListProps> = ({ onCallPicked }) => 
 
   const fetchCalls = async () => {
     try {
-      const { data: calls, error } = await supabase
+      // Use type assertion to handle the case where types aren't generated yet
+      const { data: calls, error } = await (supabase as any)
         .from('calls')
         .select('*')
         .order('started_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching calls:', error);
+        return;
+      }
 
-      const incoming = calls?.filter(call => call.status === 'incoming') || [];
-      const active = calls?.filter(call => call.status === 'active') || [];
+      const typedCalls = calls as Call[];
+      const incoming = typedCalls?.filter(call => call.status === 'incoming') || [];
+      const active = typedCalls?.filter(call => call.status === 'active') || [];
       
       setIncomingCalls(incoming);
       setActiveCalls(active);
@@ -96,7 +101,8 @@ const IncomingCallList: React.FC<IncomingCallListProps> = ({ onCallPicked }) => 
         return;
       }
 
-      const { error } = await supabase
+      // Use type assertion for the update operation
+      const { error } = await (supabase as any)
         .from('calls')
         .update({ 
           status: 'active', 
@@ -105,7 +111,15 @@ const IncomingCallList: React.FC<IncomingCallListProps> = ({ onCallPicked }) => 
         })
         .eq('id', call.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error picking call:', error);
+        toast({
+          title: "Error picking call",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        return;
+      }
 
       ringingAudio.pause();
       onCallPicked({ ...call, status: 'active', agent_id: user.id });
