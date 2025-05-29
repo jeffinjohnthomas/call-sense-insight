@@ -17,11 +17,24 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import IncomingCallList from '@/components/IncomingCallList';
+import LiveTranscriptPanel from '@/components/LiveTranscriptPanel';
+
+interface Call {
+  id: string;
+  caller_name: string;
+  caller_number: string;
+  status: 'incoming' | 'active' | 'ended';
+  agent_id?: string;
+  started_at: string;
+  answered_at?: string;
+  duration_seconds: number;
+}
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [currentCall, setCurrentCall] = useState(null);
+  const [currentCall, setCurrentCall] = useState<Call | null>(null);
   const [transcript, setTranscript] = useState('');
   const [sentiment, setSentiment] = useState({ score: 0, label: 'Neutral' });
   const [emotion, setEmotion] = useState('Neutral');
@@ -95,6 +108,12 @@ const Dashboard = () => {
     });
     
     navigate('/login');
+  };
+
+  const handleCallPicked = (call: Call) => {
+    setCurrentCall(call);
+    setIsRecording(true);
+    setTranscript('');
   };
   
   // Mock real-time data for charts
@@ -299,36 +318,14 @@ const Dashboard = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          {/* Live Transcript */}
+          {/* Left Column - Live Transcript and Charts */}
           <div className="xl:col-span-2 space-y-6">
-            <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 rounded-3xl shadow-2xl">
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
-                  <CardTitle className="text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Live Transcription</CardTitle>
-                  <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-700/50 border border-gray-600/50 hover:bg-gray-600/50 transition-all duration-300">
-                    {isRecording ? (
-                      <>
-                        <Mic className="h-4 w-4 text-rose-400" />
-                        <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></div>
-                        <span className="text-sm text-rose-300 font-medium">Recording</span>
-                      </>
-                    ) : (
-                      <>
-                        <MicOff className="h-4 w-4 text-gray-400" />
-                        <span className="text-sm text-gray-400">Standby</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-900/50 rounded-2xl p-6 min-h-[200px] border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
-                  <p className="text-gray-300 leading-relaxed">
-                    {transcript || "Waiting for incoming call..."}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Live Transcript with Active Call Info */}
+            <LiveTranscriptPanel 
+              transcript={transcript}
+              isRecording={isRecording}
+              activeCall={currentCall}
+            />
 
             {/* Charts Section */}
             <Tabs defaultValue="sentiment" className="w-full">
@@ -437,9 +434,12 @@ const Dashboard = () => {
             </Tabs>
           </div>
 
-          {/* Analysis Panel */}
+          {/* Right Column - Call Management and Analysis */}
           <div className="space-y-6">
-            {/* Current Sentiment */}
+            {/* Incoming Call List */}
+            <IncomingCallList onCallPicked={handleCallPicked} />
+
+            {/* Analysis Panel */}
             <Card className="bg-gray-800/40 backdrop-blur-xl border-gray-700/50 hover:bg-gray-800/60 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 group rounded-3xl shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center space-x-2">
